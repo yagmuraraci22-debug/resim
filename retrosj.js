@@ -1,8 +1,8 @@
-// GELİŞMİŞ GİZLİ BOŞLUK VE SATIR TEMİZLEYİCİ
-function parseTextToList(rawText) {
+// 👑 YENİ: İki farklı klasörü de destekleyen gelişmiş liste düzenleyici
+function parseTextToList(rawText, folderName = "resimler") {
     return rawText.split(/\r?\n/).map(name => {
         let cleanName = name.trim();
-        return cleanName ? `resimler/${cleanName}` : null;
+        return cleanName ? `${folderName}/${cleanName}` : null;
     }).filter(Boolean);
 }
 
@@ -18,7 +18,7 @@ const albumData = [
             ANMP0927.jpg
             ANMP0926.jpg
             ANMP0925.jpg
-        `) 
+        `,"resimler") 
     },
     { 
         date: "17.04.2026", 
@@ -26,7 +26,7 @@ const albumData = [
             ANMP0924.jpg
             ANMP0922.jpg
             ANMP0921.jpg
-        `) 
+        `,"resimler") 
     },
     { 
         date: "01.04.2026", 
@@ -64,7 +64,7 @@ const albumData = [
             ANMP0812.jpg
             ANMP0811.jpg
             ANMP0810.jpg
-        `) 
+        `,"resimler2") 
     },
     { 
         date: "25.03.2026", 
@@ -100,7 +100,7 @@ const albumData = [
            ANMP0724.jpg
            ANMP0725.jpg
             
-        `) 
+        `,"resimler2")
     },
      { 
         date: "piknik", 
@@ -129,10 +129,10 @@ const albumData = [
            WhatsApp Image 2026-05-08 at 22.20.38.jpeg
 
             
-        `) 
+        `,"resimler") 
     },
      { 
-        date: "piknik", 
+        date: "ifşalar", 
         photos: parseTextToList(`
            WhatsApp Image 2026-05-19 at 19.29.37.jpeg
            WhatsApp Image 2026-05-19 at 19.29.38 (1).jpeg
@@ -160,7 +160,7 @@ const albumData = [
            WhatsApp Image 2026-05-19 at 19.37.07.jpeg
 
             
-        `) 
+        `,"resimler") 
     }
 ];
 
@@ -171,7 +171,7 @@ const videoData = [
     "resimler/ANMR0763.mp4",
     "resimler/ANMR0762.mp4",
     "resimler/ANMR0744.mp4"
-];
+];"resimler"
 
 let characterData = [
     { 
