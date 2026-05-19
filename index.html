@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anı sandığı <3</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+<style>:root {
+    --bg-color: #c4a1ff;
+    --window-bg: #fff9c4;
+    --header-bg: #ffcc80;
+    --border-color: #333;
+}
+
+body {
+    background: linear-gradient(180deg, #c4a1ff 0%, #ffc1e3 100%);
+    font-family: 'VT323', monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    user-select: none;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.hidden { display: none !important; }
+
+/* --- 1. EKRAN: SINIRSIZ SANDIK SEÇİMİ --- */
+.chest-container { max-width: 900px; text-align: center; width: 100%; }
+.main-title { font-size: 38px; color: #333; margin-bottom: 30px; }
+.chest-grid { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; }
+.chest-wrapper { text-align: center; cursor: pointer; }
+
+.date-badge {
+    font-size: 22px; background-color: #ff8a80; color: white;
+    padding: 3px 10px; border: 3px solid var(--border-color);
+    box-shadow: 4px 4px 0px rgba(0,0,0,0.15); margin-bottom: 10px; display: inline-block;
+}
+.char-badge { background-color: #4db6ac; } 
+
+.pixel-chest {
+    width: 100px; height: 75px; background: #8d6e63; border: 5px solid var(--border-color);
+    position: relative; margin: 0 auto; box-shadow: 8px 8px 0px rgba(0,0,0,0.1); transition: transform 0.2s;
+}
+.pixel-chest::before, .pixel-chest::after {
+    content: ''; position: absolute; top: 0; bottom: 0; width: 10px; background: #ffca28;
+    border-left: 3px solid var(--border-color); border-right: 3px solid var(--border-color);
+}
+.pixel-chest::before { left: 15px; }
+.pixel-chest::after { right: 15px; }
+.chest-lock {
+    position: absolute; left: 50%; top: 35%; transform: translate(-50%, -50%);
+    width: 16px; height: 16px; background: #ffca28; border: 3px solid var(--border-color); z-index: 2;
+}
+.char-chest { background: #5c6bc0; }
+.chest-wrapper:hover .pixel-chest { transform: scale(1.1) rotate(-3deg); }
+
+/* --- 2. EKRAN: SEÇİM MENÜLERİ --- */
+.grid-container { max-width: 900px; text-align: center; width: 100%; }
+.menu-title { font-size: 36px; color: #333; margin-bottom: 20px; }
+.egg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 120px)); gap: 20px; justify-content: center; }
+
+.mini-egg {
+    background-color: var(--window-bg); border: 3px solid var(--border-color);
+    box-shadow: 5px 5px 0px rgba(0,0,0,0.15); cursor: pointer; transition: transform 0.1s;
+}
+.mini-egg:hover { transform: scale(1.05); }
+.mini-header { background-color: var(--header-bg); border-bottom: 3px solid var(--border-color); font-size: 14px; padding: 2px; text-align: left; padding-left: 5px; }
+.mini-content { padding: 10px; font-size: 18px; }
+
+.pixel-star-icon { 
+    font-size: 32px; margin-bottom: 5px; color: #ffca28;
+    text-shadow: 2px 2px 0px #333; animation: float 2s infinite ease-in-out;
+}
+.mini-avatar-img { width: 50px; height: 50px; border: 2px solid var(--border-color); border-radius: 5px; object-fit: cover; margin-bottom: 5px; }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+/* --- 3. EKRAN: BÜYÜK ANI PENCERESİ --- */
+.window-container { width: 340px; background-color: var(--window-bg); border: 4px solid var(--border-color); box-shadow: 12px 12px 0px rgba(0, 0, 0, 0.15); }
+.title-bar { background-color: var(--header-bg); border-bottom: 4px solid var(--border-color); padding: 6px 10px; display: flex; justify-content: space-between; align-items: center; }
+.title-text { font-size: 20px; font-weight: bold; color: var(--border-color); }
+.window-controls { display: flex; gap: 4px; }
+.control-btn { width: 14px; height: 14px; border: 2px solid var(--border-color); background: white; cursor: pointer; }
+.content { padding: 15px; text-align: center; }
+
+.image-display { width: 100%; height: 220px; border: 4px solid var(--border-color); background: white; margin-bottom: 10px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+.image-display img { width: 100%; height: 100%; object-fit: cover; }
+
+.rating-section { margin: 5px 0; }
+.rating-title { font-size: 18px; color: #555; }
+.hearts-container { display: flex; justify-content: center; gap: 6px; font-size: 28px; cursor: pointer; }
+.pixel-heart { color: #ccc; }
+.pixel-heart.active { color: #ff4081; }
+
+.navigation-controls { display: flex; justify-content: space-between; margin-top: 15px; gap: 5px; }
+.btn-action { background-color: #a7ffeb; font-family: 'VT323', monospace; font-size: 18px; padding: 5px 10px; border: 3px solid var(--border-color); box-shadow: 3px 3px 0px rgba(0,0,0,0.2); cursor: pointer; flex: 1; }
+.btn-back { background-color: #ff8a80; }
+.btn-action:active { box-shadow: 0px 0px 0px; transform: translate(3px, 3px); }
+
+/* --- 4. EKRAN: KARAKTER KARTI --- */
+.char-card-container { width: 480px; background-color: var(--window-bg); border: 4px solid var(--border-color); box-shadow: 12px 12px 0px rgba(0, 0, 0, 0.15); }
+.char-layout { display: flex; gap: 15px; text-align: left; margin-bottom: 15px; }
+.char-big-img { width: 150px; height: 180px; border: 4px solid var(--border-color); object-fit: cover; background: white; }
+.char-table { flex: 1; border-collapse: collapse; font-size: 18px; }
+.char-table td { padding: 4px; border-bottom: 2px dashed #999; }
+.char-table tr td:first-child { font-weight: bold; color: #ff6f00; }
+
+.animal-box { display: flex; align-items: center; justify-content: center; gap: 10px; background-color: #e0f7fa; border: 3px solid var(--border-color); padding: 5px; margin-bottom: 10px; font-size: 20px; }
+.animal-pixel-img { width: 40px; height: 40px; object-fit: contain; image-rendering: pixelated; }
+
+/* İnteraktif Puan Kutuları CSS Tasarımı */
+.stat-bar {
+    display: flex;
+    gap: 3px;
+    margin-top: 4px;
+}
+
+.stat-cube {
+    width: 14px;
+    height: 18px;
+    background-color: #ccc; /* Boş kutu rengi */
+    border: 2px solid #333;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.stat-cube:hover {
+    transform: scale(1.2);
+}
+
+/* Her özelliğin kendine has aktif doluluk rengi */
+.stat-bar[data-stat="sinirli"] .stat-cube.active { background-color: #ef5350; }
+.stat-bar[data-stat="mutlu"] .stat-cube.active { background-color: #66bb6a; }
+.stat-bar[data-stat="komik"] .stat-cube.active { background-color: #ffca28; }
+.stat-bar[data-stat="yaratici"] .stat-cube.active { background-color: #42a5f5; }
+/* HTML içindeki <style> bölümüne, diğer stat-bar renklerinin altına ekle */
+.stat-bar[data-stat="lider"] .stat-cube.active { background-color: #ba68c8; }   /* Mor */
+.stat-bar[data-stat="uzgun"] .stat-cube.active { background-color: #90a4ae; }   /* Gri/Mavi */
+.stat-bar[data-stat="sosyal"] .stat-cube.active { background-color: #ff8a65; }  /* Turuncu/Mercan */
+.stat-bar[data-stat="konuskan"] .stat-cube.active { background-color: #4db6ac; } /* Turkuaz */
+
+/* 📱 TELEFON VE TABLET UYUMLULUK AYARLARI */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+        align-items: flex-start; /* Mobilde yukarıdan başlasın, taşma yapmasın */
+    }
+    
+    .chest-grid {
+        gap: 15px; /* Mobilde sandık aralarını daraltır */
+    }
+    
+    .egg-grid {
+        grid-template-columns: repeat(2, 120px) !important; /* Mobilde yan yana tam 2 kutu sığdırır */
+        gap: 15px;
+    }
+    
+    .window-container, .char-card-container {
+        width: 100% !important; /* Telefon ekranının genişliğine tam oturur */
+        max-width: 340px;
+        margin: 0 auto;
+    }
+    
+    /* Dokunmatik ekranlarda butonlara basıldığında çirkin mavi parlama efektini kaldırır */
+    .mini-egg, .btn-action, .chest-wrapper {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+}
+</style>
+</head>
+<body>
+
+    <div class="chest-container" id="chestScreen">
+        <div class="main-title">Anı ve Karakter Evreni</div>
+        <div class="chest-grid">
+            
+            <div class="chest-wrapper" onclick="openChest(0)">
+                <div class="date-badge">24.04.2026</div>
+                <div class="pixel-chest"><div class="chest-lock"></div></div>
+            </div>
+
+            <div class="chest-wrapper" onclick="openChest(1)">
+                <div class="date-badge">17.04.2026</div>
+                <div class="pixel-chest"><div class="chest-lock"></div></div>
+            </div>
+
+            <div class="chest-wrapper" onclick="openChest(2)">
+                <div class="date-badge">01.04.2026</div>
+                <div class="pixel-chest"><div class="chest-lock"></div></div>
+            </div>
+
+            <div class="chest-wrapper" onclick="openChest(3)">
+                <div class="date-badge">25.03.2026</div>
+                <div class="pixel-chest"><div class="chest-lock"></div></div>
+            </div>
+
+            <div class="chest-wrapper" onclick="openChest(4)">
+                <div class="date-badge">piknik</div>
+                <div class="pixel-chest"><div class="chest-lock"></div></div>
+            </div>
+            
+            <div class="chest-wrapper" onclick="openChest(4)">
+                <div class="date-badge">ifşalar</div>
+                <div class="pixel-chest"><div class="chest-lock"></div></div>
+            </div>
+
+    <div class="chest-wrapper" onclick="openVideoChest()">
+    <div class="date-badge" style="background-color: #ffca28;">Özel Videolar</div>
+    <div class="pixel-chest" style="background: #e65100;">
+           <div class="chest-icon">🎬</div>
+        <div class="chest-lock"></div>
+    </div>
+</div>
+</div>
+
+            <div class="chest-wrapper" onclick="openCharacterMenu()">
+                <div class="date-badge char-badge">Karakterler</div>
+                <div class="pixel-chest char-chest">
+                    <div class="chest-lock"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+   <div class="grid-container hidden" id="menuScreen">
+    
+        <div class="menu-title" id="menuTitle">Anı Envanteri</div>
+        
+        <div class="egg-grid" id="eggGrid">
+            </div>
+
+        <div class="navigation-controls" style="max-width: 300px; margin: 20px auto 0 auto; gap: 10px;">
+            <button class="btn-action" id="btnPrevPage" onclick="prevPage()"><- Geri</button>
+            <span id="pageInfo" style="font-size: 24px; align-self: center; color: #333;">1/1</span>
+            <button class="btn-action" id="btnNextPage" onclick="nextPage()">İleri -></button>
+        </div>
+
+        <button class="btn-action btn-back" onclick="backToChests()" style="margin-top: 20px; max-width: 150px;"><- Ana Menü</button>
+    </div>
+
+
+    <div class="window-container hidden" id="windowScreen">
+        <div class="title-bar">
+            <span class="title-text" id="windowTitle">Anı #1</span>
+            <div class="window-controls"><div class="control-btn" onclick="backToMenu()"></div><div class="control-btn" style="background: #ff8a80;" onclick="backToMenu()"></div></div>
+        </div>
+        <div class="content">
+            <div class="image-display" style="height: auto; min-height: 220px;">
+    <img id="galleryImage" src="" alt="Anı Fotoğrafı" style="display: block;">
+    
+    <video id="galleryVideo" controls style="width: 100%; max-height: 300px; display: none; background: #000; border: 2px solid #333;"></video>
+</div>
+            <div class="rating-section">
+                <div class="rating-title">Bu anıya puan ver:</div>
+                <div class="hearts-container" id="photoHearts">
+                    <span class="pixel-heart" onclick="rate(1, 'photoHearts')">♥</span>
+                    <span class="pixel-heart" onclick="rate(2, 'photoHearts')">♥</span>
+                    <span class="pixel-heart" onclick="rate(3, 'photoHearts')">♥</span>
+                    <span class="pixel-heart" onclick="rate(4, 'photoHearts')">♥</span>
+                    <span class="pixel-heart" onclick="rate(5, 'photoHearts')">♥</span>
+                </div>
+            </div>
+            <div class="navigation-controls">
+                <button class="btn-action" onclick="prevPhoto()"><- Önceki</button>
+                <button class="btn-action btn-back" onclick="backToMenu()">Menü</button>
+                <button class="btn-action" onclick="nextPhoto()">Sonraki -></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="char-card-container hidden" id="charCardScreen">
+        <div class="title-bar">
+            <span class="title-text" id="charCardTitle">Karakter Detayları</span>
+            <div class="window-controls"><div class="control-btn" onclick="backToMenu()"></div><div class="control-btn" style="background: #ff8a80;" onclick="backToMenu()"></div></div>
+        </div>
+        <div class="content">
+            <div class="char-layout">
+                <img id="charBigImg" src="" class="char-big-img" alt="Avatar">
+<table class="char-table">
+    <tr><td>İsim:</td><td id="charName"></td></tr>
+    <tr><td>Sınıf:</td><td id="charClass"></td></tr>
+    <tr><td>Yetenek:</td><td id="charSkill"></td></tr>
+    <tr><td>Sözü:</td><td id="charQuote"></td></tr>
+    
+    <tr>
+        <td>😡 Sinirli:</td>
+        <td>
+            <div class="stat-bar" id="barSinirli" data-stat="sinirli">
+                </div>
+        </td>
+    </tr>
+    <tr>
+        <td>😊 Mutlu:</td>
+        <td>
+            <div class="stat-bar" id="barMutlu" data-stat="mutlu"></div>
+        </td>
+    </tr>
+    <tr>
+        <td>😂 Komik:</td>
+        <td>
+            <div class="stat-bar" id="barKomik" data-stat="komik"></div>
+        </td>
+    </tr>
+    <tr>
+        <td>🎨 Yaratıcı:</td>
+        <td>
+            <div class="stat-bar" id="barYaratici" data-stat="yaratici"></div>
+        </td>
+    </tr>
+     <tr>
+<tr>
+    <td>👑 Lider:</td>
+    <td>
+        <div class="stat-bar" id="barlider" data-stat="lider"></div>
+    </td>
+</tr>
+<tr>
+    <td>😢 Üzgün:</td>
+    <td>
+        <div class="stat-bar" id="baruzgun" data-stat="uzgun"></div>
+    </td>
+</tr>
+<tr>
+    <td>🎉 Sosyal:</td>
+    <td>
+        <div class="stat-bar" id="barsosyal" data-stat="sosyal"></div>
+    </td>
+</tr>
+<tr>
+    <td>💬 Konuşkan:</td>
+    <td>
+        <div class="stat-bar" id="barkonuskan" data-stat="konuskan"></div>
+    </td>
+</tr></table>
+            </div>
+
+            <div class="animal-box">
+                <span>Favori Hayvan: <b id="charAnimalName"></b></span>
+                <img id="charAnimalImg" src="" class="animal-pixel-img" alt="Pixel Hayvan">
+            </div>
+
+            <div class="rating-section">
+                <div class="rating-title">Karaktere Puan Ver:</div>
+                <div class="hearts-container" id="charHearts">
+                    <span class="pixel-heart" onclick="rate(1, 'charHearts')">♥</span>
+                    <span class="pixel-heart" onclick="rate(2, 'charHearts')">♥</span>
+                    <span class="pixel-heart" onclick="rate(3, 'charHearts')">♥</span>
+                    <span class="pixel-heart" onclick="rate(4, 'charHearts')">♥</span>
+                    <span class="pixel-heart" onclick="rate(5, 'charHearts')">♥</span>
+                </div>
+            </div>
+            <button class="btn-action btn-back" onclick="backToMenu()" style="width:100%; margin-top:10px;">Geri Dön</button>
+        </div>
+    </div>
+
+    <script src="retrosj.js"></script>
+</body>
+</html>
